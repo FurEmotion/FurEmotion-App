@@ -1,6 +1,4 @@
 // apis/cry_api.dart
-import 'dart:js_interop';
-
 import 'package:babystory/models/cry.dart';
 import 'package:babystory/utils/http.dart';
 import 'package:babystory/enum/cry_state.dart';
@@ -161,12 +159,12 @@ class CryApi {
         headers: {'Authorization': 'Bearer $jwt'},
         querys: {
           'pet_id': petId.toString(),
-          'start_time': startTime.isNull
+          'start_time': startTime == null
               ? DateTime.now()
                   .subtract(const Duration(days: 7))
                   .toIso8601String()
               : startTime!.toIso8601String(),
-          'end_time': endTime.isNull
+          'end_time': endTime == null
               ? DateTime.now().toIso8601String()
               : endTime!.toIso8601String(),
         },

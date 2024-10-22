@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:babystory/enum/cry_intensity.dart';
 import 'package:babystory/enum/cry_state.dart';
+import 'package:babystory/enum/pet_gender.dart';
 import 'package:babystory/enum/species.dart';
 import 'package:babystory/models/cry.dart';
+import 'package:babystory/models/pet.dart';
 import 'package:babystory/models/user.dart';
 import 'package:babystory/providers/audio_processor.dart';
 import 'package:babystory/providers/user_provider.dart';
@@ -309,7 +311,17 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CryRecordScreen()));
+                          builder: (context) => CryRecordScreen(
+                                pet: Pet(
+                                  id: 1,
+                                  name: "뽀삐",
+                                  gender: PetGender.female,
+                                  age: 3,
+                                  species: Species.dog,
+                                  subSpecies: "푸들",
+                                  photoId: "1.jpeg",
+                                ),
+                              )));
                 },
               ),
             ),
