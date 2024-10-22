@@ -21,7 +21,8 @@ Future main() async {
 
   await dotenv.load(fileName: '.env');
   await Firebase.initializeApp(
-      options: await DefaultFirebaseOptions().defaultOptions());
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     MultiProvider(
       providers: [
