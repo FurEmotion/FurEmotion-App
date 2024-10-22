@@ -1,4 +1,4 @@
-import 'package:babystory/enum/species.dart';
+import 'package:furEmotion/enum/species.dart';
 import 'package:flutter/material.dart';
 
 class DetectCryMainScreen extends StatefulWidget {

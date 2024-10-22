@@ -1,7 +1,7 @@
-import 'package:babystory/models/user.dart';
-import 'package:babystory/providers/user_provider.dart';
-import 'package:babystory/services/auth.dart';
-import 'package:babystory/utils/http.dart';
+import 'package:furEmotion/models/user.dart';
+import 'package:furEmotion/providers/user_provider.dart';
+import 'package:furEmotion/services/auth.dart';
+import 'package:furEmotion/utils/http.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

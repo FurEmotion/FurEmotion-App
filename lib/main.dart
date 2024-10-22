@@ -1,7 +1,7 @@
-import 'package:babystory/firebase_options.dart';
-import 'package:babystory/providers/user_provider.dart';
-import 'package:babystory/screens/login.dart';
-import 'package:babystory/widgets/router.dart';
+import 'package:furEmotion/firebase_options.dart';
+import 'package:furEmotion/providers/user_provider.dart';
+import 'package:furEmotion/screens/login.dart';
+import 'package:furEmotion/widgets/router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

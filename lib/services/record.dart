@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:babystory/services/detect_cry.dart';
+import 'package:furEmotion/services/detect_cry.dart';
 import 'package:record/record.dart';
 
 class RecordService {

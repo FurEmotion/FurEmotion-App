@@ -1,4 +1,4 @@
-import 'package:babystory/models/user.dart';
+import 'package:furEmotion/models/user.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider with ChangeNotifier {

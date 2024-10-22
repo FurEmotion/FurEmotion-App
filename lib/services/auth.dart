@@ -1,6 +1,6 @@
-import 'package:babystory/apis/user_api.dart';
-import 'package:babystory/error/error.dart';
-import 'package:babystory/models/user.dart';
+import 'package:furEmotion/apis/user_api.dart';
+import 'package:furEmotion/error/error.dart';
+import 'package:furEmotion/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
