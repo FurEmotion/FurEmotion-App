@@ -336,7 +336,16 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CryAnalystScreen()));
+                          builder: (context) => CryAnalystScreen(
+                                  pet: Pet(
+                                id: 1,
+                                name: "뽀삐",
+                                gender: PetGender.female,
+                                age: 3,
+                                species: Species.dog,
+                                subSpecies: "푸들",
+                                photoId: "1.jpeg",
+                              ))));
                 },
               ),
             ),
