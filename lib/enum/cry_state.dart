@@ -28,6 +28,15 @@ final Map<String, CryState> cryStateKrToEn = {
   '외로움': CryState.lonely,
 };
 
+final Map<String, String> cryStrStateEnToKr = {
+  'anger': '화남',
+  'play': '놀고 싶음',
+  'happy': '행복함',
+  'sad': '슬픔',
+  'hunger': '배고픔',
+  'lonely': '외로움',
+};
+
 List<String> get allowedCryStateEn =>
     CryState.values.map((e) => e.name).toList();
 List<String> get allowedCryStateKr => cryStateEnToKr.values.toList();

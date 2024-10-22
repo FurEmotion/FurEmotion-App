@@ -1,3 +1,4 @@
+import 'package:babystory/enum/species.dart';
 import 'package:babystory/services/notification.dart';
 import 'package:babystory/services/record.dart';
 import 'package:path_provider/path_provider.dart';
@@ -7,11 +8,13 @@ class AudioProcessor {
   late RecordService _recordService;
   late NotificationService _notificationService;
   final bool Function() isListening;
+  final Species species;
 
   AudioProcessor({
     required this.isListening,
+    required this.species,
   }) {
-    _recordService = RecordService();
+    _recordService = RecordService(species: species);
     _notificationService = NotificationService();
   }
 

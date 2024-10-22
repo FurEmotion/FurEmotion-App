@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:babystory/enum/species.dart';
 import 'package:flutter/foundation.dart';
 import 'package:babystory/services/detect_cry.dart';
 import 'package:record/record.dart';
@@ -7,12 +8,16 @@ import 'package:record/record.dart';
 class RecordService {
   bool _hasLoadModel = false;
   late DetectCryService detectCry;
+  final Species species;
 
-  RecordService() {
+  RecordService({
+    required this.species,
+  }) {
     detectCry = DetectCryService(
         modelPath:
             'assets/models/lite-model_yamnet_classification_tflite_1.tflite',
-        csvPath: 'assets/models/yamnet_class_map.csv');
+        csvPath: 'assets/models/yamnet_class_map.csv',
+        species: species);
   }
 
   Future<bool> waitSound(String filePath, Function stopCallback) async {

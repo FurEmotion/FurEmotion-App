@@ -37,9 +37,9 @@ class _NavBarRouterState extends State<NavBarRouter> {
             controller: controller,
             navBarStyle: NavBarStyle.style3,
             screens: const [
-              DetectCryMainScreen(
+              CryDetectScreen(
                   species: Species.cat, key: ValueKey('DetectCatCry')),
-              DetectCryMainScreen(
+              CryDetectScreen(
                   species: Species.dog, key: ValueKey('DetectDogCry')),
               Setting(key: ValueKey('Setting')),
             ],

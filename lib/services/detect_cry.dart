@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:babystory/enum/species.dart';
 import 'package:flutter/material.dart';
 import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 import 'package:flutter/services.dart';
@@ -9,9 +10,27 @@ class DetectCryService {
   late String modelPath;
   late String csvPath;
   late tfl.Interpreter interpreter;
-  static const List<String> babyClasses = ['Crying', 'Baby cry'];
+  final Species species;
+  static const List<String> dogClasses = [
+    'Dog',
+    'Bark',
+    'Howl',
+    'Growling',
+    'Whimper'
+  ];
+  static const List<String> catClasses = [
+    'Cat',
+    'Purr',
+    "Meow",
+    "Hiss",
+    "Caterwaul"
+  ];
+  late List<String> targetClasses;
 
-  DetectCryService({required this.modelPath, required this.csvPath});
+  DetectCryService(
+      {required this.modelPath, required this.csvPath, required this.species}) {
+    targetClasses = species == Species.dog ? dogClasses : catClasses;
+  }
 
   Future<void> loadModelAsset() async {
     interpreter = await tfl.Interpreter.fromAsset(modelPath);
@@ -89,7 +108,7 @@ class DetectCryService {
     var targetList = predictMap.keys.toList();
 
     for (String target in targetList) {
-      if (babyClasses.contains(target)) {
+      if (targetClasses.contains(target)) {
         return true;
       }
     }
