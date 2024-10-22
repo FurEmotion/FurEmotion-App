@@ -5,6 +5,7 @@ import 'package:babystory/models/user.dart';
 import 'package:babystory/providers/user_provider.dart';
 import 'package:babystory/utils/color.dart';
 import 'package:babystory/utils/data_genderator.dart';
+import 'package:babystory/widgets/appbar/simple_closed_appbar.dart';
 import 'package:babystory/widgets/cry_record_list.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -54,6 +55,7 @@ class _CryRecordScreenState extends State<CryRecordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: const SimpleClosedAppBar(title: '울음 저장소'),
         backgroundColor: ColorProps.bgLightGray,
         body: Padding(
           padding: const EdgeInsets.only(
