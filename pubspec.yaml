@@ -1,5 +1,5 @@
-name: furmotion
-description: FurMotion App
+name: furEmotion
+description: Detect pets' emotions with AI
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -66,6 +66,11 @@ dependencies:
   persistent_bottom_nav_bar: ^5.0.2
   share_plus: ^7.2.2
   provider: ^6.1.2
+  http_parser: ^4.0.2
+  path: ^1.8.3
+  uuid: ^4.2.2
+  font_awesome_flutter: ^10.7.0
+  change_app_package_name: ^1.4.0
 
 dev_dependencies:
   flutter_test:

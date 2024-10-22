@@ -58,8 +58,4 @@ ios/Runner/GoogleService-Info.plist
 ios/firebase_app_id_file.json
 android/app/google-services.json
 ios/Runner.xcodeproj/project.pbxproj
-
-# assets
-/assets
-lib_backup.zip
-widgets_backup.zip
+assets/icons/*
