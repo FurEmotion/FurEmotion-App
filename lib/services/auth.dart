@@ -1,6 +1,6 @@
-import 'package:furEmotion/apis/user_api.dart';
-import 'package:furEmotion/error/error.dart';
-import 'package:furEmotion/models/user.dart';
+import 'package:babystory/apis/user_api.dart';
+import 'package:babystory/error/error.dart';
+import 'package:babystory/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,8 +70,16 @@ class AuthServices {
   }
 
   Future<AuthError?> signinWithGoogle({isLogin = false}) async {
+    print("SigninWithGoogle, isLogin: $isLogin");
     GoogleSignIn googleSignIn = GoogleSignIn();
-    GoogleSignInAccount? account = await googleSignIn.signIn();
+    print('googleSignIn: $googleSignIn');
+    GoogleSignInAccount? account;
+    try {
+      account = await googleSignIn.signIn();
+    } catch (e) {
+      print("Error on googleSignIn: $e");
+    }
+    print('account: $account');
     if (account != null) {
       GoogleSignInAuthentication authentication = await account.authentication;
       firebase.OAuthCredential googleCredential =
@@ -81,9 +89,10 @@ class AuthServices {
       );
       firebase.UserCredential credential =
           await _firebaseAuth.signInWithCredential(googleCredential);
+      print("credential: ${credential.user}");
       if (credential.user != null) {
         _user = credential.user!;
-
+        print(isLogin ? "request login" : "request create user");
         var myUser = isLogin
             ? await _userApi.login(
                 uid: credential.user!.uid, email: credential.user!.email!)
@@ -94,6 +103,7 @@ class AuthServices {
                 nickname: credential.user!.displayName!,
                 photoId: credential.user!.photoURL,
               ));
+        myUser?.printInfo();
         if (myUser == null) {
           await signOut();
           return null;

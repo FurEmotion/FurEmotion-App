@@ -1,8 +1,8 @@
-import 'package:furEmotion/enum/species.dart';
-import 'package:furEmotion/providers/user_provider.dart';
-import 'package:furEmotion/screens/detect_cry/main.dart';
-import 'package:furEmotion/screens/setting.dart';
-import 'package:furEmotion/services/auth.dart';
+import 'package:babystory/enum/species.dart';
+import 'package:babystory/providers/user_provider.dart';
+import 'package:babystory/screens/detect_cry/main.dart';
+import 'package:babystory/screens/setting.dart';
+import 'package:babystory/services/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -18,7 +18,7 @@ class NavBarRouter extends StatefulWidget {
 }
 
 class _NavBarRouterState extends State<NavBarRouter> {
-  var controller = PersistentTabController(initialIndex: 3);
+  var controller = PersistentTabController(initialIndex: 0);
   final AuthServices _auth = AuthServices();
 
   @override

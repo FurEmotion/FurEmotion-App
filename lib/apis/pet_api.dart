@@ -1,8 +1,8 @@
 // apis/pet_api.dart
-import 'package:furEmotion/enum/pet_gender.dart';
-import 'package:furEmotion/enum/species.dart';
-import 'package:furEmotion/models/pet.dart';
-import 'package:furEmotion/utils/http.dart';
+import 'package:babystory/enum/pet_gender.dart';
+import 'package:babystory/enum/species.dart';
+import 'package:babystory/models/pet.dart';
+import 'package:babystory/utils/http.dart';
 
 class PetApi {
   final HttpUtils httpUtils = HttpUtils();

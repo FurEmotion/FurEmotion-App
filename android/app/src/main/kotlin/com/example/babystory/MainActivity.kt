@@ -1,4 +1,4 @@
-package com.jaewone.furemotion
+package com.example.babystory
 
 import io.flutter.embedding.android.FlutterActivity
 

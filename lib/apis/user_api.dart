@@ -1,5 +1,5 @@
-import 'package:furEmotion/models/user.dart';
-import 'package:furEmotion/utils/http.dart';
+import 'package:babystory/models/user.dart';
+import 'package:babystory/utils/http.dart';
 import 'package:flutter/material.dart';
 
 class UserApi {

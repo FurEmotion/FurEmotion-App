@@ -1,13 +1,13 @@
-import 'package:furEmotion/error/error.dart';
-import 'package:furEmotion/models/user.dart';
-import 'package:furEmotion/screens/signup.dart';
-import 'package:furEmotion/services/auth.dart';
-import 'package:furEmotion/utils/alert.dart';
-import 'package:furEmotion/utils/color.dart';
-import 'package:furEmotion/utils/style.dart';
-import 'package:furEmotion/utils/validate.dart';
-import 'package:furEmotion/widgets/input/input_form.dart';
-import 'package:furEmotion/widgets/router.dart';
+import 'package:babystory/error/error.dart';
+import 'package:babystory/models/user.dart';
+import 'package:babystory/screens/signup.dart';
+import 'package:babystory/services/auth.dart';
+import 'package:babystory/utils/alert.dart';
+import 'package:babystory/utils/color.dart';
+import 'package:babystory/utils/style.dart';
+import 'package:babystory/utils/validate.dart';
+import 'package:babystory/widgets/input/input_form.dart';
+import 'package:babystory/widgets/router.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {

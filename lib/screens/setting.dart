@@ -1,7 +1,7 @@
-import 'package:furEmotion/models/user.dart';
-import 'package:furEmotion/providers/user_provider.dart';
-import 'package:furEmotion/services/auth.dart';
-import 'package:furEmotion/utils/http.dart';
+import 'package:babystory/models/user.dart';
+import 'package:babystory/providers/user_provider.dart';
+import 'package:babystory/services/auth.dart';
+import 'package:babystory/utils/http.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,28 +37,26 @@ class _SettingState extends State<Setting> {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: SingleChildScrollView(
-            child: Center(
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    _authServices.signOut();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(174, 204, 55, 55),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
+          child: Center(
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  _authServices.signOut();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(174, 204, 55, 55),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6.0),
                   ),
-                  child: const Text(
-                    '로그아웃',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                ),
+                child: const Text(
+                  '로그아웃',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
               ),

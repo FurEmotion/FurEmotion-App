@@ -1,5 +1,5 @@
-import 'package:furEmotion/enum/cry_state/dog.dart';
-import 'package:furEmotion/enum/cry_state/cat.dart';
+import 'package:babystory/enum/cry_state/dog.dart';
+import 'package:babystory/enum/cry_state/cat.dart';
 
 enum CryState {
   anger,

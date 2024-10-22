@@ -1,5 +1,5 @@
-import 'package:furEmotion/enum/cry_intensity.dart';
-import 'package:furEmotion/enum/cry_state.dart';
+import 'package:babystory/enum/cry_intensity.dart';
+import 'package:babystory/enum/cry_state.dart';
 
 class Cry {
   final int id;

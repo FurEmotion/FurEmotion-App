@@ -1,5 +1,5 @@
-import 'package:furEmotion/services/notification.dart';
-import 'package:furEmotion/services/record.dart';
+import 'package:babystory/services/notification.dart';
+import 'package:babystory/services/record.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 

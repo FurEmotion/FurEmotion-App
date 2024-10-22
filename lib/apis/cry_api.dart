@@ -1,10 +1,10 @@
 // apis/cry_api.dart
 import 'dart:js_interop';
 
-import 'package:furEmotion/models/cry.dart';
-import 'package:furEmotion/utils/http.dart';
-import 'package:furEmotion/enum/cry_state.dart';
-import 'package:furEmotion/enum/cry_intensity.dart';
+import 'package:babystory/models/cry.dart';
+import 'package:babystory/utils/http.dart';
+import 'package:babystory/enum/cry_state.dart';
+import 'package:babystory/enum/cry_intensity.dart';
 
 class CryApi {
   final HttpUtils httpUtils = HttpUtils();

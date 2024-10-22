@@ -1,5 +1,5 @@
-import 'package:furEmotion/enum/pet_gender.dart';
-import 'package:furEmotion/enum/species.dart';
+import 'package:babystory/enum/pet_gender.dart';
+import 'package:babystory/enum/species.dart';
 
 class Pet {
   final int id;
