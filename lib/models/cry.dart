@@ -25,7 +25,7 @@ class Cry {
   factory Cry.fromJson(Map<String, dynamic> json) {
     return Cry(
       id: json['id'],
-      petId: json['petId'],
+      petId: json['petId'] ?? json['pet_id'],
       time: DateTime.parse(json['time']),
       state: cryStateKrToEn[json['state']] ?? CryState.happy,
       audioId: json['audioId'] ?? json['id'].toString(),

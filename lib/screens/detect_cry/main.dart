@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:babystory/enum/cry_intensity.dart';
-import 'package:babystory/enum/cry_state.dart';
-import 'package:babystory/enum/pet_gender.dart';
+import 'package:babystory/apis/pet_api.dart';
 import 'package:babystory/enum/species.dart';
 import 'package:babystory/models/cry.dart';
 import 'package:babystory/models/pet.dart';
@@ -50,6 +48,9 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
   late SvgPicture mainSvg;
   late ListenState listenState;
   late User user;
+  late PetApi petApi;
+  late Future<Pet?> petFuture;
+  Pet? pet;
 
   late AudioProcessor _audioProcessor;
   bool isListening = false;
@@ -62,10 +63,28 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
     return user;
   }
 
+  Future<Pet?> getUserPet() async {
+    var pets = await petApi.getUserPets(userId: user.uid);
+    Pet? petData;
+    if (pets != null && pets.isNotEmpty) {
+      for (var i = 0; i < pets.length; i++) {
+        if (pets[i].species == widget.species) {
+          petData = pets[i];
+        }
+      }
+    }
+    setState(() {
+      pet = petData;
+    });
+    return petData;
+  }
+
   @override
   void initState() {
     super.initState();
     user = getUserFromProvider();
+    petApi = PetApi(jwt: user.jwt ?? '');
+    petFuture = getUserPet();
 
     listenState = ListenState.init;
     var species = widget.species == Species.dog ? 'dog' : 'cat';
@@ -183,29 +202,31 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
     }
 
     // Send the file to the server and get predictState
-    // var json = await httpUtils.postMultipart(
-    //     url: '/cry/predict',
-    //     headers: {'Authorization': 'Bearer ${user.jwt ?? ''}'},
-    //     filePath: filePath);
-    // if (json == null) {
-    //   return;
-    // }
-    // print("cry detect res: $json");
-    // CryState predictState = CryState.fromPredictMap(json);
-    Cry predictState = Cry(
-        id: 1,
-        petId: 1,
-        time: DateTime.now(),
-        state: CryState.hunger,
-        audioId: '1.wav',
-        predictMap: {
-          'hunger': 0.82,
-          'sad': 0.1,
-          'angry': 0.05,
-        },
-        intensity: CryIntensity.medium,
-        duration: 2.0);
-    predictState.printInfo();
+    if (pet == null) {
+      return;
+    }
+    var json = await httpUtils.postMultipart(
+        url: '/cry/predict?pet_id=${pet!.id}',
+        headers: {'Authorization': 'Bearer ${user.jwt ?? ''}'},
+        filePath: filePath);
+    if (json == null) {
+      return;
+    }
+    print("cry detect res: $json");
+    Cry cry = Cry.fromJson(json['cry']);
+    // Cry predictState = Cry(
+    //     id: 1,
+    //     petId: 1,
+    //     time: DateTime.now(),
+    //     state: CryState.hunger,
+    //     audioId: '1.wav',
+    //     predictMap: {
+    //       'hunger': 0.82,
+    //       'sad': 0.1,
+    //       'angry': 0.05,
+    //     },
+    //     intensity: CryIntensity.medium,
+    //     duration: 2.0);
 
     // Stop the rotation and update the state
     setListenStateWithRef(ListenState.done);
@@ -217,7 +238,7 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CryResultScreen(cryState: predictState),
+            builder: (context) => CryResultScreen(cryState: cry),
           ));
     });
   }
@@ -230,126 +251,124 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 246, 246, 246),
-        body: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: widget.species == Species.cat
-                    ? const Color.fromARGB(247, 242, 211, 244)
-                    : Colors.orange.withOpacity(0.3),
-              ),
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.1),
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    getTitle(listenState),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
+      body: FutureBuilder<Pet?>(
+        future: petFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            return Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: widget.species == Species.cat
+                        ? const Color.fromARGB(247, 242, 211, 244)
+                        : Colors.orange.withOpacity(0.3),
                   ),
-                  // const SizedBox(height: 10),
-                  Stack(
-                    alignment: Alignment.center,
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.1),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AvatarGlow(
-                        animate: [ListenState.listening, ListenState.crying]
-                            .contains(listenState),
-                        endRadius: 160.0,
-                        glowColor: Colors.red.shade400,
-                        duration: const Duration(milliseconds: 2000),
-                        curve: Curves.easeInOut,
-                        child: GestureDetector(
-                          onTap: toggleListening,
-                          child: Material(
-                            shape: const CircleBorder(),
-                            elevation: 8,
-                            child: Container(
-                              padding: const EdgeInsets.all(15),
-                              height: 150,
-                              width: 150,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color.fromARGB(255, 252, 252, 252),
-                              ),
-                              child: Transform.scale(
-                                scale: _scaleAnimation.value *
-                                    _bounceAnimation.value,
-                                child: mainSvg,
+                      Text(
+                        getTitle(listenState),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      // const SizedBox(height: 10),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          AvatarGlow(
+                            animate: [ListenState.listening, ListenState.crying]
+                                .contains(listenState),
+                            endRadius: 160.0,
+                            glowColor: Colors.red.shade400,
+                            duration: const Duration(milliseconds: 2000),
+                            curve: Curves.easeInOut,
+                            child: GestureDetector(
+                              onTap: toggleListening,
+                              child: Material(
+                                shape: const CircleBorder(),
+                                elevation: 8,
+                                child: Container(
+                                  padding: const EdgeInsets.all(15),
+                                  height: 150,
+                                  width: 150,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color.fromARGB(255, 252, 252, 252),
+                                  ),
+                                  child: Transform.scale(
+                                    scale: _scaleAnimation.value *
+                                        _bounceAnimation.value,
+                                    child: mainSvg,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                          if (listenState == ListenState.analysing)
+                            RotationTransition(
+                              turns: _rotationController,
+                              child: CustomPaint(
+                                painter: CircleHollowPainter(),
+                              ),
+                            ),
+                        ],
                       ),
-                      if (listenState == ListenState.analysing)
-                        RotationTransition(
-                          turns: _rotationController,
-                          child: CustomPaint(
-                            painter: CircleHollowPainter(),
-                          ),
-                        ),
+                      const SizedBox(height: 100),
                     ],
                   ),
-                  const SizedBox(height: 100),
-                ],
-              ),
-            ),
-            Positioned(
-              bottom: 110,
-              right: 0,
-              child: BoldCenterRoundedButton(
-                areaHeight: 66,
-                areaWidthRatio: 0.88,
-                text: "울음 기록 보기",
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CryRecordScreen(
-                                pet: Pet(
-                                  id: 1,
-                                  name: "뽀삐",
-                                  gender: PetGender.female,
-                                  age: 3,
-                                  species: Species.dog,
-                                  subSpecies: "푸들",
-                                  photoId: "1.jpeg",
-                                ),
-                              )));
-                },
-              ),
-            ),
-            Positioned(
-              bottom: 30,
-              right: 0,
-              child: BoldCenterRoundedButton(
-                areaHeight: 66,
-                areaWidthRatio: 0.88,
-                text: "울음 분석 보기",
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CryAnalystScreen(
-                                  pet: Pet(
-                                id: 1,
-                                name: "뽀삐",
-                                gender: PetGender.female,
-                                age: 3,
-                                species: Species.dog,
-                                subSpecies: "푸들",
-                                photoId: "1.jpeg",
-                              ))));
-                },
-              ),
-            ),
-          ],
-        ));
+                ),
+                Positioned(
+                  bottom: 110,
+                  right: 0,
+                  child: BoldCenterRoundedButton(
+                    areaHeight: 66,
+                    areaWidthRatio: 0.88,
+                    text: "울음 기록 보기",
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CryRecordScreen(
+                                    pet: snapshot.data!,
+                                  )));
+                    },
+                  ),
+                ),
+                Positioned(
+                  bottom: 30,
+                  right: 0,
+                  child: BoldCenterRoundedButton(
+                    areaHeight: 66,
+                    areaWidthRatio: 0.88,
+                    text: "울음 분석 보기",
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CryAnalystScreen(pet: snapshot.data!)));
+                    },
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Center(
+                child: Text('${speciesEnToKr[widget.species]}를 먼저 등록해주세요.'));
+          }
+        },
+      ),
+    );
   }
 }

@@ -23,7 +23,7 @@ class CryRecordScreen extends StatefulWidget {
 class _CryRecordScreenState extends State<CryRecordScreen> {
   late DateTime startDate = DateTime.now().subtract(const Duration(days: 7));
   late DateTime endDate = DateTime.now();
-  List<Cry> cries = generateRandomCries(100);
+  List<Cry> cries = [];
   late CryApi cryApi;
   late User user;
 
@@ -36,12 +36,11 @@ class _CryRecordScreenState extends State<CryRecordScreen> {
   }
 
   Future<void> getCries() async {
-    // cryStates = await cryApi.getCries(
-    //     baby: widget.baby, startDate: startDate, endDate: endDate);
-    // setState(() {
-    //   cryStates;
-    //   cryStates[0].printInfo();
-    // });
+    var criesData = await cryApi.getCriesBetweenTime(
+        petId: widget.pet.id, startTime: startDate, endTime: endDate);
+    setState(() {
+      cries = criesData;
+    });
   }
 
   @override
@@ -49,7 +48,7 @@ class _CryRecordScreenState extends State<CryRecordScreen> {
     super.initState();
     user = getUserFromProvider();
     cryApi = CryApi(jwt: user.jwt!);
-    // getCries();
+    getCries();
   }
 
   @override

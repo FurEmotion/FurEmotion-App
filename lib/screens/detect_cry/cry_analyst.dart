@@ -1,6 +1,9 @@
 import 'package:babystory/enum/cry_state.dart';
 import 'package:babystory/models/pet.dart';
+import 'package:babystory/models/user.dart';
+import 'package:babystory/providers/user_provider.dart';
 import 'package:babystory/utils/color.dart';
+import 'package:babystory/utils/http.dart';
 import 'package:babystory/widgets/appbar/simple_closed_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:d_chart/commons/config_render.dart';
@@ -12,6 +15,7 @@ import 'package:d_chart/numeric/combo.dart';
 import 'package:d_chart/ordinal/bar.dart';
 import 'package:d_chart/ordinal/pie.dart';
 import 'package:d_chart/time/line.dart';
+import 'package:provider/provider.dart';
 
 class CryAnalystScreen extends StatefulWidget {
   final Pet pet;
@@ -26,144 +30,81 @@ class CryAnalystScreen extends StatefulWidget {
 }
 
 class _CryAnalystScreenState extends State<CryAnalystScreen> {
-  late Map<String, dynamic> inspectData;
+  final HttpUtils httpUtils = HttpUtils();
+  late User user;
+  late Future<Map<String, dynamic>> fetchDataFuture;
   late String petName;
+
   @override
   void initState() {
     super.initState();
     petName = widget.pet.name;
-    inspectData = {
-      "cry_freq_hour": [
-        4,
-        4,
-        4,
-        5,
-        3,
-        4,
-        1,
-        2,
-        3,
-        7,
-        4,
-        3,
-        2,
-        2,
-        4,
-        1,
-        3,
-        4,
-        6,
-        5
-      ],
-      "cry_freq_date": {
-        "date": [
-          "2023-11-04",
-          "2023-11-05",
-          "2023-11-06",
-          "2023-11-07",
-          "2023-11-08",
-          "2023-11-09",
-          "2023-11-10",
-          "2023-11-11",
-          "2023-11-12",
-          "2023-11-13",
-          "2023-11-14",
-          "2023-11-15",
-          "2023-11-16",
-          "2023-11-17",
-          "2023-11-18",
-          "2023-11-19",
-          "2023-11-20",
-          "2023-11-21",
-          "2023-11-22",
-          "2023-11-23",
-          "2023-11-24",
-          "2023-11-25",
-          "2023-11-26",
-          "2023-11-27",
-          "2023-11-28",
-          "2023-11-29",
-          "2023-11-30",
-          "2023-12-01",
-          "2023-12-02",
-          "2023-12-03"
-        ],
-        "freqs": [
-          2,
-          3,
-          2,
-          1,
-          2,
-          2,
-          3,
-          1,
-          4,
-          3,
-          2,
-          3,
-          3,
-          2,
-          1,
-          1,
-          3,
-          1,
-          3,
-          4,
-          3,
-          3,
-          2,
-          4,
-          1,
-          3,
-          1,
-          1,
-          3,
-          4
-        ]
-      },
-      "type_freq": {
-        "happy": 5,
-        "hunger": 9,
-        "lonely": 9,
-      },
-      "duration_of_type": {
-        "type": [
-          "happy",
-          "hunger",
-          "lonely",
-        ],
-        "duration": [0.362, 2.347, 3.479],
-        "bar_percent": [0.675, 0.765, 0.927]
-      },
-      "logId": "0204eb99-35de-4a30-b6fc-9590a176985c_2023-11-04_2023-12-04"
-    };
+    user = getUserFromProvider();
+    fetchDataFuture = fetchData();
+  }
+
+  User getUserFromProvider() {
+    final user = context.read<UserProvider>().user;
+    if (user == null) {
+      throw Exception('User is null');
+    }
+    return user;
+  }
+
+  Future<Map<String, dynamic>> fetchData() async {
+    try {
+      var json = await httpUtils.get(
+          url: '/cry/inspect?pet_id=${widget.pet.id}',
+          querys: {'pet_id': widget.pet.id.toString()},
+          headers: {'Authorization': 'Bearer ${user.jwt}'});
+      return json != null && json['result'] != null ? json['result'] : {};
+    } catch (e) {
+      debugPrint(e.toString());
+      return {};
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const SimpleClosedAppBar(title: "울음 분석"),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              chart1(inspectData["cry_freq_hour"].cast<int>()),
-              const SizedBox(height: 62),
-              chart2(
-                inspectData["cry_freq_date"]['date'].cast<String>(),
-                inspectData["cry_freq_date"]['freqs'].cast<int>(),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: fetchDataFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            final inspectData = snapshot.data!;
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    chart1(inspectData["cry_freq_hour"].cast<int>()),
+                    const SizedBox(height: 62),
+                    chart2(
+                      inspectData["cry_freq_date"]['date'].cast<String>(),
+                      inspectData["cry_freq_date"]['freqs'].cast<int>(),
+                    ),
+                    const SizedBox(height: 56),
+                    chart3(inspectData["type_freq"]),
+                    const SizedBox(height: 56),
+                    chart4(
+                      inspectData["duration_of_type"]["type"].cast<String>(),
+                      inspectData["duration_of_type"]["duration"]
+                          .cast<double>(),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 56),
-              chart3(inspectData["type_freq"]),
-              const SizedBox(height: 56),
-              chart4(
-                inspectData["duration_of_type"]["type"].cast<String>(),
-                inspectData["duration_of_type"]["duration"].cast<double>(),
-              ),
-            ],
-          ),
-        ),
+            );
+          } else {
+            return const Center(child: Text('Something went wrong'));
+          }
+        },
       ),
     );
   }
@@ -275,7 +216,7 @@ class _CryAnalystScreenState extends State<CryAnalystScreen> {
         SizedBox(height: 176, child: _chart2(dates, freqs)),
         const SizedBox(height: 10),
         description(
-            '최근 한달 간 $petName는 총 ${cryCount}번 울었어요. 하루에 ${mean.toInt()}번에서 ${mean.toInt() + 1}번 정도 울어요.'),
+            '최근 한달 간 $petName는 총 $cryCount번 울었어요. 하루에 ${mean.toInt()}번에서 ${mean.toInt() + 1}번 정도 울어요.'),
         const SizedBox(height: 2),
         description(
             '조금씩이기는 하나 시간이 지날수록 $petName가 더 ${leftSum > rightSum ? '많이' : '적게'} 울고 있어요.'),

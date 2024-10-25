@@ -148,10 +148,10 @@ class CryApi {
   }
 
   // Get cries between two times
-  Future<List<Cry>?> getCriesBetweenTime({
+  Future<List<Cry>> getCriesBetweenTime({
     required int petId,
-    required DateTime? startTime,
-    required DateTime? endTime,
+    DateTime? startTime,
+    DateTime? endTime,
   }) async {
     try {
       final res = await httpUtils.get(
@@ -163,21 +163,21 @@ class CryApi {
               ? DateTime.now()
                   .subtract(const Duration(days: 7))
                   .toIso8601String()
-              : startTime!.toIso8601String(),
+              : startTime.toIso8601String(),
           'end_time': endTime == null
               ? DateTime.now().toIso8601String()
-              : endTime!.toIso8601String(),
+              : endTime.toIso8601String(),
         },
       );
       if (res == null || res['cries'] == null) {
-        return null;
+        return [];
       }
       final criesJsonList = res['cries'] as List<dynamic>;
       List<Cry> cries =
           criesJsonList.map((cryJson) => Cry.fromJson(cryJson)).toList();
       return cries;
     } catch (e) {
-      return null;
+      return [];
     }
   }
 }

@@ -13,6 +13,11 @@ const Map<String, Species> speciesKrToEn = {
   '고양이': Species.cat,
 };
 
+const Map<String, String> speciesStrEnToKr = {
+  'dog': '개',
+  'cat': '고양이',
+};
+
 List<String> allowedSpeciesEn =
     Species.values.map((e) => e.toString().split('.').last).toList();
 List<String> allowedSpeciesKr = speciesEnToKr.values.toList();
