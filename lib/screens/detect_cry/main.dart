@@ -251,6 +251,9 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.species == Species.cat
+          ? const Color.fromARGB(247, 242, 211, 244)
+          : Colors.orange.withOpacity(0.3),
       body: FutureBuilder<Pet?>(
         future: petFuture,
         builder: (context, snapshot) {
@@ -365,7 +368,11 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
             );
           } else {
             return Center(
-                child: Text('${speciesEnToKr[widget.species]}를 먼저 등록해주세요.'));
+                child: Text('${speciesEnToKr[widget.species]}를 먼저 등록해주세요.',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    )));
           }
         },
       ),

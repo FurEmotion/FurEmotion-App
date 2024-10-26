@@ -81,3 +81,40 @@ class PetBlueprint {
     this.photoId,
   });
 }
+
+class PetUpdateData {
+  int? id;
+  String? name;
+  PetGender? gender;
+  int? age;
+  Species? species;
+  String? subSpecies;
+  String? photoId;
+
+  PetUpdateData({
+    this.id,
+    this.name,
+    this.gender,
+    this.age,
+    this.species,
+    this.subSpecies,
+    this.photoId,
+  });
+
+  factory PetUpdateData.fromJson(Map<String, dynamic> json) {
+    return PetUpdateData(
+      id: json['id'],
+      name: json['name'],
+      gender: petGenderKrToEn[json['gender']!] ?? PetGender.spayed,
+      age: json['age'],
+      species: speciesKrToEn[json['species']] ?? Species.dog,
+      subSpecies: json['subSpecies'],
+      photoId: json['photoId'],
+    );
+  }
+
+  void printInfo() {
+    print(
+        'Pet Update Data: $id, $name, $gender, $age, $species, $subSpecies, $photoId');
+  }
+}

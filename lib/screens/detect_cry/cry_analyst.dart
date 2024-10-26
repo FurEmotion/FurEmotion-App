@@ -77,6 +77,34 @@ class _CryAnalystScreenState extends State<CryAnalystScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             final inspectData = snapshot.data!;
+            if (inspectData.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height,
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "울음 분석을 위해서는",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "100개 이상의 울음 기록이 필요합니다.",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
             return Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),

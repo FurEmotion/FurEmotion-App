@@ -173,6 +173,8 @@ class CryApi {
         return [];
       }
       final criesJsonList = res['cries'] as List<dynamic>;
+      if (criesJsonList.isEmpty) return [];
+      print("cryJson: ${criesJsonList[criesJsonList.length - 1]}");
       List<Cry> cries =
           criesJsonList.map((cryJson) => Cry.fromJson(cryJson)).toList();
       return cries;

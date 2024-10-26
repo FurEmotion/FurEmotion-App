@@ -28,6 +28,21 @@ final Map<CryState, String> cryStateEnToEnStr = {
   CryState.lonely: 'lonely',
 };
 
+final Map<String, CryState> cryStateEnStrToEn = {
+  'anger': CryState.anger,
+  'play': CryState.play,
+  'happy': CryState.happy,
+  'sad': CryState.sad,
+  'hunger': CryState.hunger,
+  'lonely': CryState.lonely,
+  '화남': CryState.anger,
+  '놀고 싶음': CryState.play,
+  '행복함': CryState.happy,
+  '슬픔': CryState.sad,
+  '배고픔': CryState.hunger,
+  '외로움': CryState.lonely,
+};
+
 final Map<String, CryState> cryStateKrToEn = {
   '화남': CryState.anger,
   '놀고 싶음': CryState.play,

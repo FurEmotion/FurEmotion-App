@@ -27,7 +27,7 @@ class Cry {
       id: json['id'],
       petId: json['petId'] ?? json['pet_id'],
       time: DateTime.parse(json['time']),
-      state: cryStateKrToEn[json['state']] ?? CryState.happy,
+      state: cryStateEnStrToEn[json['state']] ?? CryState.happy,
       audioId: json['audioId'] ?? json['id'].toString(),
       predictMap: Map<String, double>.from(json['predictMap']),
       intensity: cryIntensityKrToEn[json['intensity']] ?? CryIntensity.medium,

@@ -33,6 +33,7 @@ class _CryRecordListItemState extends State<CryRecordListItem> {
 
   @override
   Widget build(BuildContext context) {
+    widget.cry.printInfo();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: ExpansionTileCard(

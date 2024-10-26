@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class LabelNumInput1 extends StatefulWidget {
   final String label;
   final String? hint;
-  final double value;
+  final num value;
   final double labelWidth;
   final bool intOnly; // 정수 입력만 받을지 여부
   final Function(num)? onFocusOut; // 포커스 해제 시 수행할 함수

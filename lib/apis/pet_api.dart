@@ -89,6 +89,25 @@ class PetApi {
     }
   }
 
+  Future<bool> uploadPetProfileImg({
+    required String jwt,
+    required int petId,
+    required String filePath,
+  }) async {
+    try {
+      final res = await httpUtils.postMultipart(
+        url: '/pet/upload/profile/$petId',
+        headers: {
+          'Authorization': 'Bearer $jwt',
+        },
+        filePath: filePath,
+      );
+      return res?['success'] == true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   // Delete pet
   Future<bool> deletePet({
     required int petId,

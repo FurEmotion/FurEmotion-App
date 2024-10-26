@@ -1,4 +1,5 @@
 import 'package:babystory/apis/cry_api.dart';
+import 'package:babystory/apis/raw.api.dart';
 import 'package:babystory/models/cry.dart';
 import 'package:babystory/models/pet.dart';
 import 'package:babystory/models/user.dart';
@@ -89,7 +90,7 @@ class _CryRecordScreenState extends State<CryRecordScreen> {
                       // backgroundImage: NetworkImage(
                       //     RawsApi.getProfileLink(widget.pet.photoId)),
                       backgroundImage: NetworkImage(
-                          'https://www.haakaa.co.nz/cdn/shop/articles/25a8814a2f4466f6777af3f2be2bcb9f_500x.jpg?v=1632199588'),
+                          RawApi.getPetProfileLink(widget.pet.id.toString())),
                     ),
                   ),
                 ],

@@ -19,6 +19,8 @@ class _CryResultWidgetState extends State<CryResultScreen> {
   @override
   void initState() {
     super.initState();
+    print("CryResultScreen: ${widget.cryState.state}");
+    widget.cryState.printInfo();
     info = DetailInfoRender(cryState: widget.cryState);
   }
 
